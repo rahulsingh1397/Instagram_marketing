@@ -1,0 +1,84 @@
+market_research_task:
+  description: >
+    Investigate the latest trends, hashtags, and competitor activities on Instagram specific
+    to the industry of this Instagram account. Foccus on getting the most relevant and engaging content ideas.
+    and reveals what content performs well in the current year, identifying patterns, prefferences and emerging trends.
+
+    Current date: {current date}
+    Current year: {current year}
+    Description of the Instagram account for which this market research is being conducted: {description}:
+    <INSTAGRAM_ACCOUNT_DESCRIPTION>{instagram_description}</INSTAGRAM_ACCOUNT_DESCRIPTION>
+
+    Find the most relevant topics, hashtags and trends to use the posts for next week.
+    THe Focus if the following week is the following:
+    <NEXT_WEEK_FOCUS>{next_week_focus}</NEXT_WEEK_FOCUS>
+  expected_output: >
+    A report with key findings, including 3-5 trending sub-topics or angles
+    related to {topic}, with brief explanations of why they are relevant now.
+    This report will be saved to a file.
+  agent: market_researcher
+  output_file: 'market_research/market_research.md'
+
+create_content_calendar_task:
+  description: >
+    Design a content calendar for the week for {topic}.
+    This should include post ideas, suggested hashtags, titles/hooks, and publishing times.
+    Incorporate the findings from the market research.
+  expected_output: >
+    A structured content calendar for the week (e.g., Monday to Sunday).
+    Each day should have a theme/topic, a brief description of the content,
+    suggested hashtags, and an optimal publishing time.
+    This calendar will be saved to a file.
+  agent: content_strategist
+  context:
+    - market_research_task
+  output_file: 'content_calendar.md'
+
+copy_writing_task:
+  description: >
+    Write the post description for each post outlined in the week's content calendar.
+    The tone should be engaging and suitable for Instagram, reflecting the {topic}.
+  expected_output: >
+    Engaging and concise Instagram post descriptions for each day's content
+    as per the content calendar. Each description should be ready to publish.
+    Each day's post description will be saved to a file (or compiled).
+    Let's assume for now we output a single file with all descriptions.
+  agent: copy_writer
+  context:
+    - create_content_calendar_task
+  output_file: 'post_descriptions.md'
+
+create_image_descriptions_task:
+  description: >
+    Write detailed image descriptions (prompts for an AI image generator) for each
+    post in the content calendar to generate AI images.
+    The descriptions should be vivid and clearly convey the desired visual style
+    and elements for {topic}.
+  expected_output: >
+    A set of detailed text prompts, one for each post in the week's content calendar,
+    suitable for input into an AI image generation tool.
+    This will be saved to a file.
+  agent: visual_artist
+  context:
+    - create_content_calendar_task
+  output_file: 'image_prompts.txt'
+
+compile_content_for_the_week_task:
+  description: >
+    Compile all the work (market research insights, content calendar, copy, and image
+    descriptions/prompts) and create a single week's plan document.
+    This document provides a complete overview of the content strategy and assets for the week.
+  expected_output: >
+    A comprehensive document that includes:
+    1. Summary of Market Research Findings.
+    2. The Weekly Content Calendar.
+    3. All Post Descriptions.
+    4. All AI Image Prompts.
+    Formatted as a single, well-organized markdown document.
+  agent: content_strategist
+  context:
+    - market_research_task
+    - create_content_calendar_task
+    - copy_writing_task
+    - create_image_descriptions_task
+  output_file: 'weekly_content_plan_for_{topic}.md'

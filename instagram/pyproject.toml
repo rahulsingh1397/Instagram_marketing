@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "instagram"
+version = "0.1.0"
+description = "Instagram marketing automation using crewAI"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "instagram", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10,<3.13"
+crewai = {extras = ["tools"], version = "^0.35.0"}
+python-dotenv = "^1.0.0"
+requests = "^2.31.0"
+setuptools = "^69.0.0"
+langchain-openai = "^0.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+instagram = "instagram.main:run"
+run_crew = "instagram.main:run"
+train = "instagram.main:train"
+replay = "instagram.main:replay"
+test = "instagram.main:test"
+
+[tool.crewai]
+type = "crew"
